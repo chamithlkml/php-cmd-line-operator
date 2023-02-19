@@ -5,7 +5,13 @@ class ConsoleApp{
 
     public function subscribe(int $plan_id=0, string $email='', string $first_name='', string $last_name=''): object
     {
-        return new \stdClass();
+        $obj = new \stdClass();
+        $obj->email = $email;
+        $obj->first_name = $first_name;
+        $obj->last_name = $last_name;
+        $obj->plan_id = $plan_id;
+        
+        return $obj;
     }
 
     public function upgrade(int $plain_id=0, string $email='', string $uuid=''): object
@@ -21,6 +27,11 @@ class ConsoleApp{
     public function unsubscribe(string $uuid=''): object
     {
         return new \stdClass();
+    }
+
+    private function do_something(): void
+    {
+
     }
 
 }

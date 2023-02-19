@@ -11,26 +11,25 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARAT
 
 try{
     $response = new stdClass();
-    $response->status = true;
     
 
     $console_application = new ConsoleApp();
     $command_operator = new CmdOperator($console_application);
-    $actions = $command_operator->get_actions();
-    print_r($actions);
+    $long_options = $command_operator->get_long_options();
+    $command_params = getopt('', $long_options);
+    $response = $command_operator->call_method($command_params);
 }catch(Exception $ex){
-    $response = new stdClass();
     $response->status = 0;
     $response->message = $ex->getMessage();
-
 }catch(Error $er){
-    $response = new stdClass();
     $response->status = 0;
     $response->message = $er->getMessage();
 }catch(Throwable $t){
-    $response = new stdClass();
     $response->status = 0;
     $response->message = $t->getMessage();
 }
+
+if(isset($response->message))
+    echo $response->message;
 
 print_r($response);
