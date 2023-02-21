@@ -31,6 +31,7 @@ try{
     $response->message = $t->getMessage();
 }
 
+# Change the return type as you wish
 header("Content-Type: application/json");
 echo json_encode($response);
 exit();
