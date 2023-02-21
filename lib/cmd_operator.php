@@ -122,6 +122,7 @@ class CmdOperator{
         {
             throw new Exception("Please specify a method name to call as `--method_name` of your console app class");
         }
+        # If more than one methods found in command params, an exception must be thrown
         else if(count($valid_methods) > 1)
         {
             throw new Exception("More than one method found in the command issued");
