@@ -1,23 +1,25 @@
 <?php
 namespace chamithlkml;
-use custom_namespace;
-use custom_namespace\ConsoleApp;
 use Exception;
 use Error;
 use Throwable;
 use stdClass;
 
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'inc.php');
+# Include you console app related dependencies
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'your_console_app.php');
+
+# Include cmd_operator.php
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmd_operator.php');
 
 try{
     $response = new stdClass();
-    
 
-    $console_application = new ConsoleApp();
+    # create an instance of your Console app class
+    $console_application = new \custom_namespace\YourConsoleApp();
+
+    # Create an instance of CmdOperator
     $command_operator = new CmdOperator($console_application);
-    $long_options = $command_operator->get_long_options();
-    $command_params = getopt('', $long_options);
-    $response = $command_operator->call_method($command_params);
+    $response = $command_operator->call_method();
 }catch(Exception $ex){
     $response->status = 0;
     $response->message = $ex->getMessage();
@@ -29,7 +31,6 @@ try{
     $response->message = $t->getMessage();
 }
 
-if(isset($response->message))
-    echo $response->message;
-
-print_r($response);
+header("Content-Type: application/json");
+echo json_encode($response);
+exit();

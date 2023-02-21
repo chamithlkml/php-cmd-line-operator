@@ -1,7 +1,7 @@
 <?php
 namespace custom_namespace;
 
-class ConsoleApp{
+class YourConsoleApp{
 
     public function subscribe(int $plan_id=0, string $email='', string $first_name='', string $last_name=''): object
     {
@@ -10,7 +10,8 @@ class ConsoleApp{
         $obj->first_name = $first_name;
         $obj->last_name = $last_name;
         $obj->plan_id = $plan_id;
-        
+        $obj->uuid = uniqid();
+
         return $obj;
     }
 
