@@ -23,7 +23,7 @@ class YourConsoleApp{
     }
 }
 ```
-You may call this methos in command line as below
+You may call this method `custom_method` in command line as below
 ```
 php cmd.php --custom_method --param1 100 --param2 abcd
 ```
