@@ -40,3 +40,8 @@ cd unit_tests
 ../vendor/bin/phpunit CmdOperatorTest.php
 ```
 ![localImage](./img/unit_test_results.png)
+
+## Docker container
+```
+docker pull chamithlkml/php-cmd-line-operator
+```
