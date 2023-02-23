@@ -27,3 +27,16 @@ You may call this method `custom_method` in command line as below
 ```
 php cmd.php --custom_method --param1 100 --param2 abcd
 ```
+
+## Running Unit Tests
+- Install composer by referring to [Composer Docs](https://getcomposer.org/download/)
+- Run composer
+```
+composer install
+```
+- Navigate to `unit_tests` directory and run the unit tests file
+```
+cd unit_tests
+../vendor/bin/phpunit CmdOperatorTest.php
+```
+![localImage](./img/unit_test_results.png)
