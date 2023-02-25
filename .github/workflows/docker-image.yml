@@ -16,4 +16,4 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: Build the Docker image
-      run: docker build . --file ../../../Dockerfile --tag chamithlkml/php-cmd-line-operator:$(date +%s)
+      run: cd ../../../ && docker build . --file ./Dockerfile --tag chamithlkml/php-cmd-line-operator:$(date +%s)
