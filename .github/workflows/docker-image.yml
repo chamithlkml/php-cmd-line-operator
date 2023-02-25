@@ -16,4 +16,6 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: Build the Docker image
-      run: cd ../../../ && docker build . --file ./Dockerfile --tag chamithlkml/php-cmd-line-operator:$(date +%s)
+      run: docker build . --file Dockerfile --tag chamithlkml/php-cmd-line-operator:$(date +%s)
+    - name: Push docker image to hub
+      run: docker push chamithlkml/php-cmd-line-operator:$(date +%s)
