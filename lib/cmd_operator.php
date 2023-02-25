@@ -31,6 +31,11 @@ class CmdOperator{
         $this->set_command_params();
         $valid_method = $this->get_valid_method();
 
+        if($valid_method == 'help')
+        {
+            //@todo Write a detailed help message 
+        }
+
         $related_params = $this->get_related_params($valid_method);
         
         $response = new stdClass();
