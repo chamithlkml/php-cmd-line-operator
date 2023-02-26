@@ -15,10 +15,12 @@ jobs:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@main
-    - variables:
-      tag: $(date +%s)
+    - name: Set tag name
+      id: tag
+      run: echo "::set-output name=tag::$(date +%s)"
+    
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag chamithlkml/php-cmd-line-operator:$(variables.tag)
+      run: docker build . --file Dockerfile --tag chamithlkml/php-cmd-line-operator:${{ steps.tag.outputs.tag }}
 
     - name: Push docker image to hub
-      run: docker push chamithlkml/php-cmd-line-operator:$(variables.tag)
+      run: docker push chamithlkml/php-cmd-line-operator:${{ steps.tag.outputs.tag }}
