@@ -30,7 +30,7 @@ class YourConsoleApp{
         return new \stdClass();
     }
 
-    private function do_something(): void
+    private function doSomething(): void
     {
 
     }

@@ -1,19 +1,18 @@
 # PHP Command Line Operator
-This PHP library can be used to invoke a certain method of a PHP class depending on command line parameters passed to the script.
+This PHP library can be used to invoke a certain method of a PHP class using terminal with the attributes. Please check the example below.
 
 ## Usage
-- Create a file called `cmd.php` file
+- Create a file called `cmd.php` file. This file will be invoked by the terminal command
 ```
 <?php
+use chamithlkml;
 require_once '/path/to/your/console_class.php';
 require_once '/path/to/lib/cmd_operator.php';
 
 $my_console_app = new YourConsoleClass();
-$command_operator = new \chamithlkml\CmdOperator($my_console_app);
+$command_operator = new CmdOperator($my_console_app);
 $response = $command_operator->call_method();
 ```
-- Issue the command to execute a particular method in your console app class as follow.
-
 Lets's assume your console app implementation has a public method called `custom_method`
 ```
 class YourConsoleApp{
@@ -33,11 +32,7 @@ php cmd.php --custom_method --param1 100 --param2 abcd
 - Run composer
 ```
 composer install
-```
-- Navigate to `unit_tests` directory and run the unit tests file
-```
-cd unit_tests
-../vendor/bin/phpunit CmdOperatorTest.php
+./vendor/bin/phpunit unit_tests
 ```
 ![localImage](./img/unit_test_results.png)
 

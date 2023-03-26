@@ -11,7 +11,7 @@ final class CmdOperatorTest extends TestCase
 {
     public function testNoMethodSupplied(): void
     {
-        $path_to_cmd_php = '..' . DIRECTORY_SEPARATOR . 'cmd.php';
+        $path_to_cmd_php = realpath(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'cmd.php';
         $command = 'php ' . $path_to_cmd_php;# No method name provided
         
         $output = shell_exec($command);
@@ -24,7 +24,7 @@ final class CmdOperatorTest extends TestCase
 
     public function testMoreThanOneMethodsSupplied(): void
     {
-        $path_to_cmd_php = '..' . DIRECTORY_SEPARATOR . 'cmd.php';
+        $path_to_cmd_php = realpath(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'cmd.php';
         $command = 'php ' . $path_to_cmd_php . ' --subscribe --upgrade';# Two public methods provided
 
         $output = shell_exec($command);
@@ -35,7 +35,7 @@ final class CmdOperatorTest extends TestCase
 
     public function testParamMissingOnMethod(): void
     {
-        $path_to_cmd_php = '..' . DIRECTORY_SEPARATOR . 'cmd.php';
+        $path_to_cmd_php = realpath(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'cmd.php';
         $command = 'php ' . $path_to_cmd_php . ' --subscribe --first_name Foo --last_name Bar --email foobar@mail.com';# --plan_id is missing
 
         $output = shell_exec($command);
