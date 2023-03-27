@@ -41,15 +41,14 @@ class CmdOperator
     {
         $this->setCommandParams();
         $validMethod = $this->getValidMethod();
+        $response = new stdClass();
 
         if ($validMethod == 'help') {
-            //@todo Write a detailed help message
+            $response->message = $this->getHelpMessageAsArray();
+        } else {
+            $relatedParams = $this->getRelatedParams($validMethod);
+            $response->result = call_user_func_array(array($this->classInstance, $validMethod), $relatedParams);
         }
-
-        $relatedParams = $this->getRelatedParams($validMethod);
-
-        $response = new stdClass();
-        $response->result = call_user_func_array(array($this->classInstance, $validMethod), $relatedParams);
 
         return $response;
     }
@@ -63,11 +62,12 @@ class CmdOperator
         $reflMethods = $reflClass->getMethods(ReflectionMethod::IS_PUBLIC);
 
         # long_options need to be passed to getopt function
-        $options = [];
+        $options = ["help::"];
+        $this->validMethods['help'] = [];
 
         foreach ($reflMethods as $reflMethod) {
             if (!in_array($reflMethod->name, $options)) {
-                $options[] = $reflMethod->name . '::';
+                $options[] = $reflMethod->name . "::";
             }
 
             if (!array_key_exists($reflMethod->name, $this->validMethods)) {
@@ -80,7 +80,7 @@ class CmdOperator
                 $this->validMethods[$reflMethod->name][] = $reflParameter->name;
 
                 if (!in_array($reflParameter->name, $options)) {
-                    $options[] = $reflParameter->name . ':';
+                    $options[] = $reflParameter->name . ":";
                 }
             }
         }
@@ -125,10 +125,36 @@ class CmdOperator
 
         # If no valid method is given, an error message is thrown and the execution must be hault
         if (count($validMethods) == 0) {
-            throw new Exception("Please specify a method name to call as `--method_name` of your class");
+            throw new Exception("Please specify a method name to call as `--methodName` of your class");
         } elseif (count($validMethods) > 1) {
             throw new Exception("More than one method found in the command issued");
         }
         return $validMethods[0];
+    }
+
+    /**
+     * Generate an array containing the command line option that cane be entered to the user class
+     *
+     * @return array
+     */
+    private function getHelpMessageAsArray(): array
+    {
+        $reflClass = new ReflectionClass($this->classInstance);
+        $reflMethods = $reflClass->getMethods(ReflectionMethod::IS_PUBLIC);
+        $helpMessageArr = [];
+        $helpMessageArr[] = "Usage: php Cmd.php [options...]";
+
+        foreach ($reflMethods as $reflMethod) {
+            $helpMessageLine = "--{$reflMethod->name} ";
+            $reflParams = $reflClass->getMethod($reflMethod->name)->getParameters();
+
+            foreach ($reflParams as $reflParam) {
+                $helpMessageLine .= "--{$reflParam->name} ... ";
+            }
+
+            $helpMessageArr[] = $helpMessageLine;
+        }
+
+        return $helpMessageArr;
     }
 }
