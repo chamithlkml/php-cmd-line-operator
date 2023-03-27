@@ -1,47 +1,78 @@
-<?php declare(strict_types=1);
+<?php
+
+/**
+ * This file contains basic unit tests for testing the
+ * functionalities of the CmdOperator class
+ */
+
+declare(strict_types=1);
+
+namespace Chamithlkml;
+
 use PHPUnit\Framework\TestCase;
-
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
-
-# Loading environment variables available in .env file
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
 
 final class CmdOperatorTest extends TestCase
 {
     public function testNoMethodSupplied(): void
     {
-        $path_to_cmd_php = realpath(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'cmd.php';
-        $command = 'php ' . $path_to_cmd_php;# No method name provided
-        
+        $pathToCmd = realpath(__DIR__)
+            . DIRECTORY_SEPARATOR
+            . '..'
+            . DIRECTORY_SEPARATOR
+            . 'Cmd.php';
+
+        # No method name provided
+        $command = '$(which php) ' . $pathToCmd;
+
         $output = shell_exec($command);
-        $json_obj = json_decode($output);
+        $jsonObj = json_decode($output);
 
         # status=0
-        $this->assertSame(0, $json_obj->status);
-        $this->assertStringContainsString('Please specify a method name', $json_obj->message);
+        $this->assertSame(0, $jsonObj->status);
+        $this->assertStringContainsString(
+            'Please specify a method name',
+            $jsonObj->message
+        );
     }
 
     public function testMoreThanOneMethodsSupplied(): void
     {
-        $path_to_cmd_php = realpath(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'cmd.php';
-        $command = 'php ' . $path_to_cmd_php . ' --subscribe --upgrade';# Two public methods provided
+        $pathToCmd = realpath(__DIR__)
+            . DIRECTORY_SEPARATOR
+            . '..'
+            . DIRECTORY_SEPARATOR
+            . 'Cmd.php';
+
+        # Two public methods provided
+        $command = '$(which php) ' . $pathToCmd . ' --subscribe --upgrade';
 
         $output = shell_exec($command);
-        $json_obj = json_decode($output);
+        $jsonObj = json_decode($output);
 
-        $this->assertSame('More than one method found in the command issued', $json_obj->message);
+        $this->assertSame(
+            'More than one method found in the command issued',
+            $jsonObj->message
+        );
     }
 
     public function testParamMissingOnMethod(): void
     {
-        $path_to_cmd_php = realpath(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'cmd.php';
-        $command = 'php ' . $path_to_cmd_php . ' --subscribe --first_name Foo --last_name Bar --email foobar@mail.com';# --plan_id is missing
+        $pathToCmd = realpath(__DIR__)
+            . DIRECTORY_SEPARATOR
+            . '..'
+            . DIRECTORY_SEPARATOR
+            . 'Cmd.php';
 
+        # --planId is missing
+        $command = '$(which php) ' . $pathToCmd .
+        ' --subscribe --firstName Foo --lastName Bar --email foobar@mail.com';
         $output = shell_exec($command);
-        $json_obj = json_decode($output);
+        $jsonObj = json_decode($output);
 
-        $this->assertSame(0, $json_obj->status);
-        $this->assertSame('Parameter `--plan_id` not found in the command issued', $json_obj->message);
+        $this->assertSame(0, $jsonObj->status);
+        $this->assertSame(
+            'Parameter `--planId` not found in the command issued',
+            $jsonObj->message
+        );
     }
 }
